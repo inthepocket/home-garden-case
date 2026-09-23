@@ -1,0 +1,85 @@
+<div class="users-container">
+  <h2>User Management</h2>
+
+  <!-- Find / Search Section -->
+  <div class="find-section">
+    <select [(ngModel)]="findType">
+      <option value="email">Email</option>
+      <option value="id">ID</option>
+    </select>
+    
+    <input 
+      type="text" 
+      [(ngModel)]="findQuery" 
+      [placeholder]="findType === 'id' ? 'Enter User ID...' : 'Enter Email Address...'" 
+    />
+    
+    <button (click)="onFind()">Find User</button>
+    <button (click)="loadUsers()">Reset List</button>
+  </div>
+
+  @if (errorMessage) {
+    <p class="error-msg">{{ errorMessage }}</p>
+  }
+
+  <!-- Create / Edit Form -->
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="user-form">
+    <h3>
+      @if (editingUserId !== null) {
+        Update User
+      } @else {
+        Create User
+      }
+    </h3>
+
+    <input formControlName="firstName" type="text" placeholder="First Name" />
+    <input formControlName="lastName" type="text" placeholder="Last Name" />
+    <input formControlName="age" type="number" placeholder="Age" />
+    <input formControlName="emailAddress" type="email" placeholder="Email (required)" />
+
+    <button type="submit" [disabled]="userForm.invalid">
+      @if (editingUserId !== null) {
+        Save Changes
+      } @else {
+        Add User
+      }
+    </button>
+
+    @if (editingUserId !== null) {
+      <button type="button" (click)="resetForm()">Cancel</button>
+    }
+  </form>
+
+  <!-- Users Table -->
+  <table class="users-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Age</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (user of users; track user.userId ?? $index) {
+        <tr>
+          <td>{{ user.userId }}</td>
+          <td>{{ user.firstName }}</td>
+          <td>{{ user.lastName }}</td>
+          <td>{{ user.age }}</td>
+          <td>{{ user.emailAddress }}</td>
+          <td>
+            <button (click)="onEdit(user)">Edit</button>
+            <button (click)="onDelete(user.userId)">Delete</button>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="6">No users found.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
