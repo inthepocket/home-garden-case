@@ -1,0 +1,76 @@
+<div class="gardens-container">
+  <h2>Garden Management</h2>
+
+  <!-- Find by ID Section -->
+  <div class="find-section">
+    <input type="text" [(ngModel)]="searchGardenId" placeholder="Search by Garden ID..." />
+    <button (click)="onFindById()">Find Garden</button>
+    <button (click)="loadGardens()">Reset List</button>
+  </div>
+
+  @if (errorMessage) {
+    <p class="error-msg">{{ errorMessage }}</p>
+  }
+
+  <!-- Create / Edit Form -->
+  <form [formGroup]="gardenForm" (ngSubmit)="onSubmit()" class="garden-form">
+    <h3>
+      @if (editingGardenId !== null) {
+        Update Garden
+      } @else {
+        Create Garden
+      }
+    </h3>
+
+    <input formControlName="gardenName" type="text" placeholder="Garden Name (required)" />
+    <input formControlName="totalSurfaceArea" type="number" placeholder="Surface Area (m²)" />
+    <input formControlName="locationDescription" type="text" placeholder="Location Description" />
+    <input formControlName="latitude" type="number" step="any" placeholder="Latitude" />
+    <input formControlName="longitude" type="number" step="any" placeholder="Longitude" />
+
+    <button type="submit" [disabled]="gardenForm.invalid">
+      @if (editingGardenId !== null) {
+        Save Changes
+      } @else {
+        Add Garden
+      }
+    </button>
+
+    @if (editingGardenId !== null) {
+      <button type="button" (click)="resetForm()">Cancel</button>
+    }
+  </form>
+
+  <!-- Gardens Table -->
+  <table class="gardens-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Garden Name</th>
+        <th>Surface Area</th>
+        <th>Location</th>
+        <th>Coordinates (Lat, Long)</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (garden of gardens; track garden.gardenId ?? $index) {
+        <tr>
+          <td>{{ garden.gardenId }}</td>
+          <td>{{ garden.gardenName }}</td>
+          <td>{{ garden.totalSurfaceArea }}</td>
+          <td>{{ garden.locationDescription || '-' }}</td>
+          <td>{{ garden.latitude }}, {{ garden.longitude }}</td>
+          <td>
+            <button (click)="onEdit(garden)">Edit</button>
+            <button (click)="onDelete(garden.gardenId)">Delete</button>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="6">No gardens found.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

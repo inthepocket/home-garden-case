@@ -1,0 +1,42 @@
+.app-container {
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 1rem;
+
+  h1 {
+    font-size: 1.5rem;
+    margin: 0;
+  }
+
+  nav a {
+    margin-left: 1rem;
+    text-decoration: none;
+    color: #374151;
+    font-weight: 500;
+
+    &.active {
+      color: #2e7d32;
+      border-bottom: 2px solid #2e7d32;
+      padding-bottom: 4px;
+    }
+  }
+}
+
+.app-content {
+  margin-top: 1.5rem;
+}

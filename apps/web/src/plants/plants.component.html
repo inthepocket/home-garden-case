@@ -1,0 +1,150 @@
+<div class="plants-container">
+  <h2>Plant Management & Lookup</h2>
+
+  @if (errorMessage) {
+    <div class="error-banner">
+      {{ errorMessage }}
+    </div>
+  }
+
+  <!-- Focused Search Bar -->
+  <div class="lookup-card">
+    <div class="mode-toggle">
+      <label for="lookup-garden">
+        <input
+          id="lookup-garden"
+          type="radio"
+          name="lookupMode"
+          value="garden"
+          [(ngModel)]="lookupMode"
+        />
+        Search by Garden ID
+      </label>
+      <label for="lookup-plant">
+        <input
+          id="lookup-plant"
+          type="radio"
+          name="lookupMode"
+          value="plant"
+          [(ngModel)]="lookupMode"
+        />
+        Search by Plant ID
+      </label>
+    </div>
+
+    <div class="search-input-group">
+      <label for="search-id-input" class="sr-only">Search ID</label>
+      <input
+        id="search-id-input"
+        type="text"
+        [(ngModel)]="searchId"
+        [placeholder]="lookupMode === 'garden' ? 'Enter Garden ID...' : 'Enter Plant ID...'"
+      />
+      <button (click)="onSearch()" [disabled]="!searchId.trim()">Search</button>
+    </div>
+  </div>
+
+  <!-- Create / Edit Form -->
+  <form [formGroup]="plantForm" (ngSubmit)="onSubmit()" class="plant-form">
+    <h3>{{ editingPlantId ? 'Update Plant ID: ' + editingPlantId : 'Add New Plant' }}</h3>
+
+    <div class="form-grid">
+      <div class="form-field">
+        <label for="plantName">Plant Name</label>
+        <input id="plantName" formControlName="plantName" type="text" placeholder="e.g. Tomato 1" />
+      </div>
+
+      <div class="form-field">
+        <label for="species">Species</label>
+        <input
+          id="species"
+          formControlName="species"
+          type="text"
+          placeholder="e.g. Solanum lycopersicum"
+        />
+      </div>
+
+      <div class="form-field">
+        <label for="plantType">Plant Type</label>
+        <input
+          id="plantType"
+          formControlName="plantType"
+          type="text"
+          placeholder="e.g. vegetable"
+        />
+      </div>
+
+      <div class="form-field">
+        <label for="plantationDate">Plantation Date</label>
+        <input id="plantationDate" formControlName="plantationDate" type="date" />
+      </div>
+
+      <div class="form-field">
+        <label for="surfaceAreaRequired">Surface Area Required (m²)</label>
+        <input
+          id="surfaceAreaRequired"
+          formControlName="surfaceAreaRequired"
+          type="number"
+          placeholder="90"
+        />
+      </div>
+
+      <div class="form-field">
+        <label for="idealHumidityLevel">Ideal Humidity Level (%)</label>
+        <input
+          id="idealHumidityLevel"
+          formControlName="idealHumidityLevel"
+          type="number"
+          placeholder="50"
+        />
+      </div>
+
+      <div class="form-field">
+        <label for="gardenId">Garden ID</label>
+        <input id="gardenId" formControlName="gardenId" type="number" placeholder="1" />
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" [disabled]="plantForm.invalid">
+        {{ editingPlantId ? 'Save Changes' : 'Create Plant' }}
+      </button>
+
+      @if (editingPlantId) {
+        <button type="button" (click)="resetForm()">Cancel Edit</button>
+      }
+    </div>
+  </form>
+
+  <!-- Query Results List -->
+  <div class="results-section">
+    <h3>Query Results</h3>
+
+    @if (plants.length === 0) {
+      <div class="no-results">No plants loaded. Perform a search above or add a new plant.</div>
+    } @else {
+      <div class="cards-grid">
+        @for (plant of plants; track plant.plantId) {
+          <div class="plant-card">
+            <div class="card-header">
+              <h4>{{ plant.plantName }}</h4>
+              <span class="badge">{{ plant.plantType }}</span>
+            </div>
+            <div class="card-body">
+              <p><strong>Plant ID:</strong> {{ plant.plantId }}</p>
+              <p><strong>Garden ID:</strong> {{ plant.gardenId }}</p>
+              <p><strong>Species:</strong> {{ plant.species }}</p>
+              <p><strong>Plantation Date:</strong> {{ plant.plantationDate | date }}</p>
+              <p><strong>Area Required:</strong> {{ plant.surfaceAreaRequired }} m²</p>
+              <p><strong>Ideal Humidity:</strong> {{ plant.idealHumidityLevel }}%</p>
+            </div>
+            <div class="card-actions">
+              <button (click)="onEdit(plant)">Edit</button>
+              <button (click)="onDelete(plant.plantId!)" class="btn-danger">Delete</button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

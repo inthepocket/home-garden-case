@@ -1,5 +1,6 @@
 import AutoLoad from '@fastify/autoload';
 import { diContainer, fastifyAwilixPlugin } from '@fastify/awilix';
+import cors from '@fastify/cors';
 import { asClass, asFunction } from 'awilix';
 import { FastifyInstance } from 'fastify';
 import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
@@ -17,6 +18,13 @@ import { UserService } from './services/user.service';
 export interface AppOptions {}
 
 export async function app(fastify: FastifyInstance, opts: AppOptions) {
+  await fastify.register(cors, {
+    origin: 'http://localhost:4200',
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+  });
+
   diContainer.register({
     dbConnection: asClass(DatabaseConnection).singleton(),
     db: asFunction((deps) => deps.dbConnection.db).singleton(),
