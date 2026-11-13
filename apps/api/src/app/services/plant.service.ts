@@ -3,7 +3,7 @@ import { PlantRepository } from '../database/repositories/plant.repository';
 import { NewPlant, Plant, PlantUpdate } from '../database/types';
 import { createPlantSchema, updatePlantSchema } from '@itp-home-garden/schemas';
 import { NotFoundError, ValidationError } from '../shared/errors';
-import { PlantCreateRequest } from '@itp-home-garden/api-interfaces';
+import { CreatePlantRequest } from '@itp-home-garden/api-interfaces';
 
 export class PlantService {
   private readonly plantRepository: PlantRepository;
@@ -44,7 +44,7 @@ export class PlantService {
    * Create a new plant
    * @throws Error if validation fails or garden doesn't exist
    */
-  async createPlant(data: PlantCreateRequest): Promise<Plant> {
+  async createPlant(data: CreatePlantRequest): Promise<Plant> {
     // Validate with Zod schema
     // TODO: Investigate if this is still required, as it should only be handled by fastify
     const validatedData = createPlantSchema.parse(data);

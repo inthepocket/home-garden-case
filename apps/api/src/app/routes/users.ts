@@ -16,7 +16,7 @@ import {
   usersResponseSchema,
 } from '@itp-home-garden/schemas';
 import { UserService } from '../services/user.service';
-import { UserCreateRequest } from '@itp-home-garden/api-interfaces';
+import { CreateUserRequest } from '@itp-home-garden/api-interfaces';
 
 export default async function (fastify: FastifyInstance) {
   const userService = fastify.diContainer.resolve<UserService>('userService');
@@ -98,7 +98,7 @@ export default async function (fastify: FastifyInstance) {
    * Create a new user
    */
   fastify.post<{
-    Body: UserCreateRequest;
+    Body: CreateUserRequest;
   }>(
     '/users',
     {

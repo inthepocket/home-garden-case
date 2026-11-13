@@ -2,7 +2,7 @@ import { UserRepository } from '../database/repositories/user.repository';
 import { NewUser, User, UserUpdate } from '../database/types';
 import { createUserSchema, updateUserSchema } from '@itp-home-garden/schemas';
 import { ConflictError, NotFoundError } from '../shared/errors';
-import { UserCreateRequest } from '@itp-home-garden/api-interfaces';
+import { CreateUserRequest } from '@itp-home-garden/api-interfaces';
 
 export class UserService {
   private readonly userRepository: UserRepository;
@@ -54,7 +54,7 @@ export class UserService {
    * Create a new user
    * @throws Error if email already exists
    */
-  async createUser(data: UserCreateRequest): Promise<User> {
+  async createUser(data: CreateUserRequest): Promise<User> {
     // Validate with Zod schema
     // TODO: Investigate if this is still required, as it should only be handled by fastify
     const validatedData = createUserSchema.parse(data);

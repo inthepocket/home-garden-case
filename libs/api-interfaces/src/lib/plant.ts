@@ -5,6 +5,6 @@ import {
   updatePlantSchema,
 } from '@itp-home-garden/schemas';
 
-export type PlantCreateRequest = z.infer<typeof createPlantSchema>;
-export type PlantUpdateRequest = z.infer<typeof updatePlantSchema>;
+export type CreatePlantRequest = z.infer<typeof createPlantSchema>;
+export type UpdatePlantRequest = z.infer<typeof updatePlantSchema>;
 export type PlantModel = z.infer<typeof plantResponseSchema>;

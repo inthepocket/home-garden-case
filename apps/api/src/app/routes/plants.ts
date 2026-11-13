@@ -16,7 +16,7 @@ import {
   updatePlantSchema,
 } from '@itp-home-garden/schemas';
 import { PlantService } from '../services/plant.service';
-import { PlantCreateRequest } from '@itp-home-garden/api-interfaces';
+import { CreatePlantRequest } from '@itp-home-garden/api-interfaces';
 
 export default async function (fastify: FastifyInstance) {
   const plantService = fastify.diContainer.resolve<PlantService>('plantService');
@@ -76,7 +76,7 @@ export default async function (fastify: FastifyInstance) {
    * Create a new plant
    */
   fastify.withTypeProvider<ZodTypeProvider>().post<{
-    Body: PlantCreateRequest;
+    Body: CreatePlantRequest;
   }>(
     '/plants',
     {
