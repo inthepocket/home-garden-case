@@ -1,8 +1,9 @@
 import { GardenRepository } from '../database/repositories/garden.repository';
 import { PlantRepository } from '../database/repositories/plant.repository';
 import { NewPlant, Plant, PlantUpdate } from '../database/types';
-import { createPlantSchema, updatePlantSchema } from '../schemas/plant.schema';
+import { createPlantSchema, updatePlantSchema } from '@itp-home-garden/schemas';
 import { NotFoundError, ValidationError } from '../shared/errors';
+import { PlantCreateRequest } from '@itp-home-garden/api-interfaces';
 
 export class PlantService {
   private readonly plantRepository: PlantRepository;
@@ -43,8 +44,9 @@ export class PlantService {
    * Create a new plant
    * @throws Error if validation fails or garden doesn't exist
    */
-  async createPlant(data: NewPlant): Promise<Plant> {
+  async createPlant(data: PlantCreateRequest): Promise<Plant> {
     // Validate with Zod schema
+    // TODO: Investigate if this is still required, as it should only be handled by fastify
     const validatedData = createPlantSchema.parse(data);
 
     // Verify garden exists
@@ -64,7 +66,8 @@ export class PlantService {
       );
     }
 
-    return await this.plantRepository.create(validatedData);
+    // TODO: Investigate and fix the zod-kysely mismatch
+    return await this.plantRepository.create(validatedData as NewPlant);
   }
 
   /**
@@ -79,6 +82,7 @@ export class PlantService {
     }
 
     // Validate with Zod schema
+    // TODO: Investigate if this is still required, as it should only be handled by fastify
     const validatedData = updatePlantSchema.parse(data);
 
     // If garden is being changed, verify new garden exists

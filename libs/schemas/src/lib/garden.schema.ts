@@ -1,14 +1,14 @@
 import { z } from 'zod/v4';
 
 export const gardenIdParamsSchema = z.object({
-  gardenId: z.coerce.number().int().positive('Garden ID must be a positive integer'),
+  gardenId: z.coerce.number().int().positive('GardenModel ID must be a positive integer'),
 });
 
 z.globalRegistry.add(gardenIdParamsSchema, { id: 'GardenId' });
 
 export const createGardenSchema = z
   .object({
-    gardenName: z.string().min(1, 'Garden name is required').trim(),
+    gardenName: z.string().min(1, 'GardenModel name is required').trim(),
     totalSurfaceArea: z.number().nonnegative('Total surface area must be a non-negative number'),
     locationDescription: z.string().nullable().optional(),
     latitude: z
@@ -48,7 +48,7 @@ export const gardenResponseSchema = createGardenSchema.safeExtend({
   updatedAt: z.coerce.string(),
 });
 
-z.globalRegistry.add(gardenResponseSchema, { id: 'Garden' });
+z.globalRegistry.add(gardenResponseSchema, { id: 'GardenModel' });
 
 export const gardensResponseSchema = z.array(gardenResponseSchema);
 

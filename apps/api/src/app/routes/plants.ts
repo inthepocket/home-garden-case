@@ -6,16 +6,17 @@ import {
   notFoundErrorResponseSchema,
   validationErrorResponseSchema,
 } from '../schemas/error.schema';
-import { gardenIdParamsSchema } from '../schemas/garden.schema';
 import { emptyResponseSchema } from '../schemas/general.schema';
 import {
+  gardenIdParamsSchema,
   createPlantSchema,
   plantIdParamsSchema,
   plantResponseSchema,
   plantsResponseSchema,
   updatePlantSchema,
-} from '../schemas/plant.schema';
+} from '@itp-home-garden/schemas';
 import { PlantService } from '../services/plant.service';
+import { PlantCreateRequest } from '@itp-home-garden/api-interfaces';
 
 export default async function (fastify: FastifyInstance) {
   const plantService = fastify.diContainer.resolve<PlantService>('plantService');
@@ -75,7 +76,7 @@ export default async function (fastify: FastifyInstance) {
    * Create a new plant
    */
   fastify.withTypeProvider<ZodTypeProvider>().post<{
-    Body: z.infer<typeof createPlantSchema>;
+    Body: PlantCreateRequest;
   }>(
     '/plants',
     {

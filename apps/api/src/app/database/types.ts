@@ -1,3 +1,8 @@
+import {
+  UserModel,
+  GardenModel,
+  PlantModel,
+} from '@itp-home-garden/api-interfaces';
 import { ColumnType, Generated, Insertable, Selectable, Updateable } from 'kysely';
 
 export interface Database {
@@ -6,46 +11,36 @@ export interface Database {
   plant: PlantTable;
 }
 
-export interface UserTable {
-  userId: Generated<number>;
+export interface UserTable extends Omit<UserModel, 'userId' | 'createdAt' | 'updatedAt'> {
+  userId: Generated<UserModel['userId']>;
   firstName: string | null;
   lastName: string | null;
   age: number | null;
   emailAddress: string;
-  createdAt: ColumnType<Date, string | undefined, never>;
-  updatedAt: ColumnType<Date, string | undefined, never>;
+  createdAt: ColumnType<Date, UserModel['createdAt'], never>;
+  updatedAt: ColumnType<Date, UserModel['updatedAt'], never>;
 }
 
 export type User = Selectable<UserTable>;
 export type NewUser = Insertable<UserTable>;
 export type UserUpdate = Updateable<UserTable>;
 
-export interface GardenTable {
-  gardenId: Generated<number>;
-  gardenName: string;
-  totalSurfaceArea: number; // in square meters
-  locationDescription: string | null; // e.g., "Backyard", "Patio"
-  latitude: number | null; // optional geographic coordinate
-  longitude: number | null; // optional geographic coordinate
-  createdAt: ColumnType<Date, string | undefined, never>;
-  updatedAt: ColumnType<Date, string | undefined, never>;
+export interface GardenTable extends Omit<GardenModel, 'gardenId' | 'createdAt' | 'updatedAt'> {
+  gardenId: Generated<GardenModel['gardenId']>;
+  createdAt: ColumnType<Date, GardenModel['createdAt'], never>;
+  updatedAt: ColumnType<Date, GardenModel['updatedAt'], never>;
 }
 
 export type Garden = Selectable<GardenTable>;
 export type NewGarden = Insertable<GardenTable>;
 export type GardenUpdate = Updateable<GardenTable>;
 
-export interface PlantTable {
-  plantId: Generated<number>;
-  plantName: string;
-  species: string;
-  plantType: 'vegetable' | 'fruit' | 'flower';
-  plantationDate: ColumnType<Date, string | undefined, never>;
-  surfaceAreaRequired: number; // in square meters
-  idealHumidityLevel: number;
-  gardenId: number; // foreign key to Garden
-  createdAt: ColumnType<Date, string | undefined, never>;
-  updatedAt: ColumnType<Date, string | undefined, never>;
+export interface PlantTable
+  extends Omit<PlantModel, 'plantId' | 'plantationDate' | 'createdAt' | 'updatedAt'> {
+  plantId: Generated<PlantModel['plantId']>;
+  plantationDate: ColumnType<Date, PlantModel['plantationDate'], never>;
+  createdAt: ColumnType<Date, PlantModel['createdAt'], never>;
+  updatedAt: ColumnType<Date, PlantModel['updatedAt'], never>;
 }
 
 export type Plant = Selectable<PlantTable>;

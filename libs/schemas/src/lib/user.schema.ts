@@ -1,7 +1,7 @@
 import { z } from 'zod/v4';
 
 export const userIdParamsSchema = z.object({
-  userId: z.coerce.number().int().positive('User ID must be a positive integer'),
+  userId: z.coerce.number().int().positive('UserModel ID must be a positive integer'),
 });
 
 z.globalRegistry.add(userIdParamsSchema, { id: 'UserId' });
@@ -39,7 +39,7 @@ export const userResponseSchema = createUserSchema.safeExtend({
   updatedAt: z.coerce.string(),
 });
 
-z.globalRegistry.add(userResponseSchema, { id: 'User' });
+z.globalRegistry.add(userResponseSchema, { id: 'UserModel' });
 
 export const usersResponseSchema = z.array(userResponseSchema);
 z.globalRegistry.add(usersResponseSchema, { id: 'Users' });

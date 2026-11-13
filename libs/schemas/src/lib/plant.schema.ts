@@ -1,16 +1,16 @@
 import { z } from 'zod/v4';
 
 export const plantIdParamsSchema = z.object({
-  plantId: z.coerce.number().int().positive('Plant ID must be a positive integer'),
+  plantId: z.coerce.number().int().positive('PlantModel ID must be a positive integer'),
 });
 
 z.globalRegistry.add(plantIdParamsSchema, { id: 'PlantId' });
 
 export const createPlantSchema = z.object({
-  plantName: z.string().min(1, 'Plant name is required').trim(),
+  plantName: z.string().min(1, 'PlantModel name is required').trim(),
   species: z.string().min(1, 'Species is required').trim(),
   plantType: z.enum(['vegetable', 'fruit', 'flower'], {
-    message: 'Plant type must be vegetable, fruit, or flower',
+    message: 'PlantModel type must be vegetable, fruit, or flower',
   }),
   plantationDate: z
     .union([z.iso.datetime(), z.date()])
@@ -22,7 +22,7 @@ export const createPlantSchema = z.object({
     .number()
     .min(0, 'Ideal humidity level must be between 0 and 100')
     .max(100, 'Ideal humidity level must be between 0 and 100'),
-  gardenId: z.number().int().positive('Garden ID must be a positive integer'),
+  gardenId: z.number().int().positive('GardenModel ID must be a positive integer'),
 });
 
 z.globalRegistry.add(createPlantSchema, { id: 'CreatePlant' });
@@ -30,7 +30,7 @@ z.globalRegistry.add(createPlantSchema, { id: 'CreatePlant' });
 export const updatePlantSchema = z.intersection(
   createPlantSchema,
   z.object({
-    gardenId: z.number().int().positive('Garden ID must be a positive integer').optional(),
+    gardenId: z.number().int().positive('GardenModel ID must be a positive integer').optional(),
   }),
 );
 
@@ -42,7 +42,7 @@ export const plantResponseSchema = createPlantSchema.safeExtend({
   updatedAt: z.coerce.string(),
 });
 
-z.globalRegistry.add(plantResponseSchema, { id: 'Plant' });
+z.globalRegistry.add(plantResponseSchema, { id: 'PlantModel' });
 
 export const plantsResponseSchema = z.array(plantResponseSchema);
 

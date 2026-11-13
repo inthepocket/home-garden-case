@@ -1,7 +1,8 @@
 import { UserRepository } from '../database/repositories/user.repository';
 import { NewUser, User, UserUpdate } from '../database/types';
-import { createUserSchema, updateUserSchema } from '../schemas/user.schema';
+import { createUserSchema, updateUserSchema } from '@itp-home-garden/schemas';
 import { ConflictError, NotFoundError } from '../shared/errors';
+import { UserCreateRequest } from '@itp-home-garden/api-interfaces';
 
 export class UserService {
   private readonly userRepository: UserRepository;
@@ -53,8 +54,9 @@ export class UserService {
    * Create a new user
    * @throws Error if email already exists
    */
-  async createUser(data: NewUser): Promise<User> {
+  async createUser(data: UserCreateRequest): Promise<User> {
     // Validate with Zod schema
+    // TODO: Investigate if this is still required, as it should only be handled by fastify
     const validatedData = createUserSchema.parse(data);
 
     // Check if user with this email already exists
@@ -63,7 +65,8 @@ export class UserService {
       throw new ConflictError(`User with email ${validatedData.emailAddress} already exists`);
     }
 
-    return await this.userRepository.create(validatedData);
+    // TODO: Investigate and fix the zod-kysely mismatch
+    return await this.userRepository.create(validatedData as NewUser);
   }
 
   /**
@@ -78,6 +81,7 @@ export class UserService {
     }
 
     // Validate with Zod schema
+    // TODO: Investigate if this is still required, as it should only be handled by fastify
     const validatedData = updateUserSchema.parse(data);
 
     // If email is being updated, check if it's already in use
