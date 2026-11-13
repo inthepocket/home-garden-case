@@ -3,38 +3,14 @@
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "production": ["default", "!{projectRoot}/.eslintrc.json", "!{projectRoot}/eslint.config.mjs"],
-    "sharedGlobals": ["{workspaceRoot}/.gitlab-ci.yml"]
+    "sharedGlobals": ["{workspaceRoot}/.gitlab-ci.yml", "{workspaceRoot}/tsconfig.base.json"]
   },
   "neverConnectToCloud": true,
   "plugins": [
     {
-      "plugin": "@nx/js/typescript",
-      "options": {
-        "typecheck": {
-          "targetName": "typecheck"
-        },
-        "build": {
-          "targetName": "build",
-          "configName": "tsconfig.lib.json",
-          "buildDepsName": "build-deps",
-          "watchDepsName": "watch-deps"
-        }
-      },
-      "exclude": ["libs/api-interfaces/*", "libs/schemas/*"]
-    },
-    {
       "plugin": "@nx/eslint/plugin",
       "options": {
         "targetName": "lint"
-      }
-    },
-    {
-      "plugin": "@nx/js/typescript",
-      "include": ["libs/api-interfaces/*", "libs/schemas/*"],
-      "options": {
-        "typecheck": {
-          "targetName": "typecheck"
-        }
       }
     }
   ],
@@ -43,6 +19,10 @@
       "cache": true,
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
+    },
+    "typecheck": {
+      "cache": true,
+      "inputs": ["default", "^default"]
     }
   }
 }
